@@ -66,41 +66,6 @@ import { AuthService } from '../../services/auth.service';
             </a>
           </p>
         </div>
-
-        <!-- ✅ DICAS DE LOGIN ATUALIZADAS E CORRIGIDAS -->
-        <div class="mt-6 p-4 bg-blue-50 rounded-md border border-blue-200">
-          <div class="text-center">
-            <strong class="block mb-2 text-blue-800">🎯 Credenciais para Teste:</strong>
-            
-            <!-- Admin -->
-            <div class="mb-3">
-              <span class="font-semibold text-red-600 block">👑 Administrador (Acesso Total):</span>
-              <div class="mt-1">
-                <code class="text-sm bg-red-100 px-2 py-1 rounded">admin</code> 
-                <span class="mx-1">/</span>
-                <code class="text-sm bg-red-100 px-2 py-1 rounded">123</code>
-              </div>
-            </div>
-            
-            <!-- Usuário Comum -->
-            <div class="mb-3">
-              <span class="font-semibold text-green-600 block">👤 Usuário Comum (Acesso Limitado):</span>
-              <div class="mt-1">
-                <code class="text-sm bg-green-100 px-2 py-1 rounded">joao</code> 
-                <span class="mx-1">/</span>
-                <code class="text-sm bg-green-100 px-2 py-1 rounded">123</code>
-              </div>
-            </div>
-
-            <!-- Informação sobre permissões -->
-            <div class="mt-4 pt-3 border-t border-blue-200">
-              <div class="text-xs text-blue-700 text-left">
-                <p class="mb-1">💡 <strong>Usuário Comum:</strong> Só pode editar/excluir clientes e produtos que ele mesmo criou.</p>
-                <p>👑 <strong>Administrador:</strong> Tem acesso total a todos os recursos.</p>
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
   `,
