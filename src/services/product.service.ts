@@ -10,7 +10,7 @@ import { AuthService } from './auth.service';
 export class ProductService {
   private http = inject(HttpClient);
   private authService = inject(AuthService);
-  private apiUrl = 'http://localhost:3000/api';
+  private apiUrl = 'https://savir-sistemas.onrender.com/api'; // ✅ URL DE PRODUÇÃO
 
   getAllProducts(): Observable<Product[]> {
     return this.http.get<Product[]>(`${this.apiUrl}/products`);
@@ -20,7 +20,6 @@ export class ProductService {
     return this.http.get<Product>(`${this.apiUrl}/products/${id}`);
   }
 
-  // ✅ CORRIGIDO: Agora envia createdBy
   addProduct(product: Omit<Product, 'id'>): Observable<Product> {
     const userId = this.authService.currentUser()?.id;
     const headers = new HttpHeaders().set('user-id', userId || '');
@@ -31,7 +30,6 @@ export class ProductService {
     }, { headers });
   }
 
-  // ✅ CORRIGIDO: Agora envia userId no header
   updateProduct(id: string, updatedProduct: Partial<Product>): Observable<Product> {
     const userId = this.authService.currentUser()?.id;
     const headers = new HttpHeaders().set('user-id', userId || '');
@@ -41,7 +39,6 @@ export class ProductService {
     }, { headers });
   }
 
-  // ✅ CORRIGIDO: Agora envia userId no header
   deleteProduct(id: string): Observable<void> {
     const userId = this.authService.currentUser()?.id;
     const headers = new HttpHeaders().set('user-id', userId || '');

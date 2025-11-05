@@ -9,11 +9,7 @@ import { Observable, tap } from 'rxjs';
 export class AuthService {
   private http = inject(HttpClient);
   private router = inject(Router);
-  
-  // ✅ SOLUÇÃO DIRETA - Use localhost para desenvolvimento
-  // ⚠️ SUBSTITUA pela SUA URL do Render quando for fazer deploy
-  private apiUrl = 'https://savir-sistemas.onrender.com/api'; // Para desenvolvimento
-  // private apiUrl = 'https://seu-backend.onrender.com/api'; // Para produção
+  private apiUrl = 'https://savir-sistemas.onrender.com/api'; // ✅ URL DE PRODUÇÃO
 
   currentUser = signal<any>(null);
 
