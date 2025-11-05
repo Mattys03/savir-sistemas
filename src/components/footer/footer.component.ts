@@ -10,7 +10,7 @@ import { CommonModule } from '@angular/common';
       <div class="container mx-auto px-4">
         &copy; 2024 Savir Sistemas - Todos os direitos reservados.
         <div class="mt-2 text-sm text-gray-400">
-          Desenvolvido por <strong class="text-blue-300">Matheus RP</strong>
+          Desenvolvido por <strong class="text-blue-300">Matheus Rego Pinheiro</strong>
         </div>
       </div>
     </footer>
