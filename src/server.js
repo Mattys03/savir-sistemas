@@ -563,6 +563,100 @@ app.get('/health', (req, res) => {
   });
 });
 
+// ✅ ROTA GET PARA SEED (para usar no navegador)
+app.get('/api/seed-get', async (req, res) => {
+  try {
+    console.log('🌱 Executando SEED via GET...');
+    
+    await User.deleteMany({});
+    await Client.deleteMany({});
+    await Product.deleteMany({});
+
+    const users = await User.insertMany([
+      {
+        name: 'Administrador Principal',
+        email: 'admin@savir.com.br',
+        login: 'admin',
+        profile: 'Administrador',
+        password: '123'
+      },
+      {
+        name: 'João da Silva',
+        email: 'joao.silva@example.com',
+        login: 'joao',
+        profile: 'Usuário',
+        password: '123'
+      },
+      {
+        name: 'Maria Oliveira',
+        email: 'maria.oliveira@example.com', 
+        login: 'maria',
+        profile: 'Usuário',
+        password: '123'
+      }
+    ]);
+
+    const clients = await Client.insertMany([
+      {
+        name: 'Empresa ABC Ltda',
+        email: 'contato@empresaabc.com',
+        phone: '11987654321',
+        address: 'Av. Paulista, 1000 - São Paulo, SP',
+        createdBy: users[0]._id
+      },
+      {
+        name: 'Comércio XYZ ME',
+        email: 'vendas@comercioxyz.com',
+        phone: '21912345678',
+        address: 'Rua do Comércio, 500 - Rio de Janeiro, RJ',
+        createdBy: users[1]._id
+      }
+    ]);
+
+    const products = await Product.insertMany([
+      {
+        name: 'Notebook Dell Inspiron 15',
+        description: 'Notebook Dell Inspiron 15" Intel Core i5, 8GB RAM, 256GB SSD',
+        price: 2499.99,
+        stock: 15,
+        createdBy: users[0]._id
+      },
+      {
+        name: 'Mouse Logitech MX Master 3',
+        description: 'Mouse sem fio ergonômico para produtividade',
+        price: 299.90,
+        stock: 30,
+        createdBy: users[1]._id
+      }
+    ]);
+
+    console.log('✅ Dados criados:', {
+      users: users.length,
+      clients: clients.length,
+      products: products.length
+    });
+
+    res.json({
+      success: true,
+      message: '✅ Banco populado com sucesso via GET!',
+      users: users.length,
+      clients: clients.length,
+      products: products.length,
+      logins: [
+        { usuario: 'admin', senha: '123', perfil: 'Administrador' },
+        { usuario: 'joao', senha: '123', perfil: 'Usuário' },
+        { usuario: 'maria', senha: '123', perfil: 'Usuário' }
+      ]
+    });
+  } catch (error) {
+    console.error('❌ Erro ao popular banco:', error);
+    res.status(500).json({ 
+      success: false,
+      error: 'Erro ao popular banco: ' + error.message 
+    });
+  }
+});
+
 // ✅ INICIAR SERVIDOR (MODIFICAÇÃO PARA RENDER)
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
