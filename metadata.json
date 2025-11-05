@@ -1,0 +1,5 @@
+{
+  "name": "Savir Sistemas - Gestão de Cadastros",
+  "description": "Um pequeno sistema de gestão de cadastros com usuários, clientes e produtos, incluindo funcionalidades de CRUD e login, construído com Angular e Tailwind CSS.",
+  "requestFramePermissions": []
+}

@@ -1,0 +1,26 @@
+{
+  "users": [
+    {
+      "name": "Admin",
+      "email": "admin@example.com",
+      "login": "admin",
+      "profile": "Administrador"
+    }
+  ],
+  "clients": [
+    {
+      "name": "Cliente Exemplo",
+      "email": "cliente@example.com",
+      "phone": "(00)00000-0000",
+      "address": "Rua A, 123"
+    }
+  ],
+  "products": [
+    {
+      "name": "Produto A",
+      "description": "Descrição do produto A",
+      "price": 10.5,
+      "stock": 100
+    }
+  ]
+}
