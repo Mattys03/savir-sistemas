@@ -10,7 +10,11 @@ import { AuthService } from './auth.service';
 export class ClientService {
   private http = inject(HttpClient);
   private authService = inject(AuthService);
-  private apiUrl = 'http://localhost:3000/api';
+  
+  // ✅ SOLUÇÃO DIRETA - Use localhost para desenvolvimento
+  // ⚠️ SUBSTITUA pela SUA URL do Render quando for fazer deploy
+  private apiUrl = 'http://localhost:3000/api'; // Para desenvolvimento
+  // private apiUrl = 'https://seu-backend.onrender.com/api'; // Para produção
 
   getAllClients(): Observable<Client[]> {
     return this.http.get<Client[]>(`${this.apiUrl}/clients`);

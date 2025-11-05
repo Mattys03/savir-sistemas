@@ -9,23 +9,25 @@ import { Observable, tap } from 'rxjs';
 export class AuthService {
   private http = inject(HttpClient);
   private router = inject(Router);
+  
+  // ✅ SOLUÇÃO DIRETA - Use localhost para desenvolvimento
+  // ⚠️ SUBSTITUA pela SUA URL do Render quando for fazer deploy
+  private apiUrl = 'http://localhost:3000/api'; // Para desenvolvimento
+  // private apiUrl = 'https://seu-backend.onrender.com/api'; // Para produção
 
   currentUser = signal<any>(null);
 
   constructor() {
-    // Carrega usuário do localStorage se existir
     const storedUser = localStorage.getItem('currentUser');
     if (storedUser) {
       this.currentUser.set(JSON.parse(storedUser));
     }
   }
 
-  // 🔥 AGORA USA O BACKEND REAL para login
   login(credentials: any): Observable<any> {
-    return this.http.post<any>('http://localhost:3000/api/auth/login', credentials).pipe(
+    return this.http.post<any>(`${this.apiUrl}/auth/login`, credentials).pipe(
       tap(response => {
         if (response.success) {
-          // Salva o usuário no signal e no localStorage
           this.currentUser.set(response.user);
           localStorage.setItem('currentUser', JSON.stringify(response.user));
         }
@@ -47,7 +49,6 @@ export class AuthService {
     return this.currentUser()?.profile === 'Administrador';
   }
 
-  // 🔥 NOVO: Buscar usuário atual do backend
   getCurrentUser(): any {
     return this.currentUser();
   }
