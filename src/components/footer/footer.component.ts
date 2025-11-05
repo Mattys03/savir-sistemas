@@ -9,6 +9,9 @@ import { CommonModule } from '@angular/common';
     <footer class="bg-gray-800 text-white text-center py-4 mt-8">
       <div class="container mx-auto px-4">
         &copy; 2024 Savir Sistemas - Todos os direitos reservados.
+        <div class="mt-2 text-sm text-gray-400">
+          Desenvolvido por <strong class="text-blue-300">Matheus RP</strong>
+        </div>
       </div>
     </footer>
   `,
