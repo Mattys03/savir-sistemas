@@ -13,7 +13,7 @@ export class ClientService {
   
   // ✅ SOLUÇÃO DIRETA - Use localhost para desenvolvimento
   // ⚠️ SUBSTITUA pela SUA URL do Render quando for fazer deploy
-  private apiUrl = 'http://localhost:3000/api'; // Para desenvolvimento
+  private apiUrl = 'https://savir-sistemas.onrender.com/api'; // Para desenvolvimento
   // private apiUrl = 'https://seu-backend.onrender.com/api'; // Para produção
 
   getAllClients(): Observable<Client[]> {
