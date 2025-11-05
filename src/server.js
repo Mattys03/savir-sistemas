@@ -4,9 +4,11 @@ import cors from 'cors';
 
 const app = express();
 
-// ✅ CORS CORRIGIDO - ACEITA QUALQUER ORIGEM
+// ✅ CORS COMPLETO - ACEITA TUDO
 app.use(cors({
-  origin: true,  // Aceita qualquer origem
+  origin: '*',
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'user-id', 'X-Requested-With', 'Accept'],
   credentials: true
 }));
 
@@ -18,7 +20,7 @@ app.use((req, res, next) => {
   next();
 });
 
-// ✅ CONEXÃO MONGODB CORRIGIDA - NÃO TRAVA MAIS
+// ✅ CONEXÃO MONGODB CORRIGIDA
 const mongoURL = process.env.MONGODB_URI || 'mongodb://localhost:27017/savir-sistemas';
 
 console.log('🔄 Iniciando conexão MongoDB...');
@@ -26,17 +28,16 @@ console.log('🔄 Iniciando conexão MongoDB...');
 mongoose.connect(mongoURL, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
-  serverSelectionTimeoutMS: 5000, // Timeout de 5 segundos
+  serverSelectionTimeoutMS: 5000,
 })
 .then(() => {
   console.log('✅ Conectado ao MongoDB');
 })
 .catch(err => {
   console.error('❌ Erro ao conectar MongoDB:', err.message);
-  // NÃO FAZ process.exit() - DEIXA O SERVIDOR RODAR MESMO SEM BANCO
 });
 
-// ✅ SCHEMAS E MODELS (MOVIDOS PARA ANTES DAS ROTAS)
+// ✅ SCHEMAS E MODELS
 const UserSchema = new mongoose.Schema({
   name: String,
   email: String,
@@ -65,7 +66,7 @@ const User = mongoose.model('User', UserSchema);
 const Client = mongoose.model('Client', ClientSchema);
 const Product = mongoose.model('Product', ProductSchema);
 
-// ✅ ROTA DE HEALTH CHECK (TESTE RÁPIDO)
+// ✅ ROTA DE HEALTH CHECK
 app.get('/health', (req, res) => {
   res.json({ 
     status: 'OK', 
@@ -82,23 +83,30 @@ app.get('/api', (req, res) => {
     timestamp: new Date().toISOString(),
     endpoints: [
       'GET /api/users',
-      'POST /api/users (CRIAR USUÁRIO)',
-      'POST /api/auth/login',
+      'POST /api/users',
+      'PUT /api/users/:id',
+      'DELETE /api/users/:id',
       'GET /api/clients', 
+      'POST /api/clients',
+      'PUT /api/clients/:id',
+      'DELETE /api/clients/:id',
       'GET /api/products',
+      'POST /api/products',
+      'PUT /api/products/:id',
+      'DELETE /api/products/:id',
+      'POST /api/auth/login',
       'POST /api/seed',
       'GET /api/seed-get'
     ]
   });
 });
 
-// ✅ ROTA DE LOGIN COM VERIFICAÇÃO DE BANCO
+// ✅ ROTA DE LOGIN
 app.post('/api/auth/login', async (req, res) => {
   try {
     const { login, password } = req.body;
     console.log('🔐 Tentativa de login:', login);
     
-    // Verifica se o banco está conectado
     if (mongoose.connection.readyState !== 1) {
       return res.status(500).json({
         success: false,
@@ -136,7 +144,8 @@ app.post('/api/auth/login', async (req, res) => {
   }
 });
 
-// ✅ ROTA PARA LISTAR USUÁRIOS COM VERIFICAÇÃO
+// ==================== ROTAS DE USUÁRIOS ====================
+
 app.get('/api/users', async (req, res) => {
   try {
     if (mongoose.connection.readyState !== 1) {
@@ -152,7 +161,6 @@ app.get('/api/users', async (req, res) => {
   }
 });
 
-// ✅ ROTA PARA OBTER USUÁRIO POR ID
 app.get('/api/users/:id', async (req, res) => {
   try {
     if (mongoose.connection.readyState !== 1) {
@@ -169,7 +177,7 @@ app.get('/api/users/:id', async (req, res) => {
   }
 });
 
-// ✅ ROTA PARA CRIAR NOVO USUÁRIO (REGISTRO)
+// ✅ ROTA POST PARA USUÁRIOS (JÁ EXISTIA)
 app.post('/api/users', async (req, res) => {
   try {
     if (mongoose.connection.readyState !== 1) {
@@ -225,7 +233,67 @@ app.post('/api/users', async (req, res) => {
   }
 });
 
-// 🔥 ROTAS DE CLIENTES COM VERIFICAÇÃO
+// ✅ ROTA PUT PARA ATUALIZAR USUÁRIO (NOVA)
+app.put('/api/users/:id', async (req, res) => {
+  try {
+    if (mongoose.connection.readyState !== 1) {
+      return res.status(500).json({ error: 'Banco de dados não disponível' });
+    }
+    
+    const { name, email, login, profile } = req.body;
+    console.log('🔄 Atualizando usuário:', req.params.id);
+
+    const updatedUser = await User.findByIdAndUpdate(
+      req.params.id,
+      { name, email, login, profile },
+      { new: true, runValidators: true }
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({ error: 'Usuário não encontrado' });
+    }
+
+    console.log('✅ Usuário atualizado:', updatedUser._id);
+    res.json(updatedUser);
+  } catch (error) {
+    console.error('❌ Erro ao atualizar usuário:', error);
+    res.status(500).json({ error: 'Erro ao atualizar usuário: ' + error.message });
+  }
+});
+
+// ✅ ROTA DELETE PARA EXCLUIR USUÁRIO (NOVA - RESOLVE O PROBLEMA)
+app.delete('/api/users/:id', async (req, res) => {
+  try {
+    if (mongoose.connection.readyState !== 1) {
+      return res.status(500).json({ error: 'Banco de dados não disponível' });
+    }
+    
+    console.log('🗑️ Tentando excluir usuário:', req.params.id);
+    
+    const deletedUser = await User.findByIdAndDelete(req.params.id);
+
+    if (!deletedUser) {
+      console.log('❌ Usuário não encontrado para exclusão:', req.params.id);
+      return res.status(404).json({ error: 'Usuário não encontrado' });
+    }
+
+    console.log('✅ Usuário excluído com sucesso:', req.params.id);
+    res.json({
+      success: true,
+      message: 'Usuário excluído com sucesso',
+      deletedUser: {
+        id: deletedUser._id,
+        name: deletedUser.name
+      }
+    });
+  } catch (error) {
+    console.error('❌ Erro ao excluir usuário:', error);
+    res.status(500).json({ error: 'Erro ao excluir usuário: ' + error.message });
+  }
+});
+
+// ==================== ROTAS DE CLIENTES ====================
+
 app.get('/api/clients', async (req, res) => {
   try {
     if (mongoose.connection.readyState !== 1) {
@@ -280,7 +348,67 @@ app.post('/api/clients', async (req, res) => {
   }
 });
 
-// 🔥 ROTAS DE PRODUTOS COM VERIFICAÇÃO
+// ✅ ROTA PUT PARA ATUALIZAR CLIENTE (NOVA)
+app.put('/api/clients/:id', async (req, res) => {
+  try {
+    if (mongoose.connection.readyState !== 1) {
+      return res.status(500).json({ error: 'Banco de dados não disponível' });
+    }
+    
+    const { name, email, phone, address } = req.body;
+    console.log('🔄 Atualizando cliente:', req.params.id);
+
+    const updatedClient = await Client.findByIdAndUpdate(
+      req.params.id,
+      { name, email, phone, address },
+      { new: true, runValidators: true }
+    );
+
+    if (!updatedClient) {
+      return res.status(404).json({ error: 'Cliente não encontrado' });
+    }
+
+    console.log('✅ Cliente atualizado:', updatedClient._id);
+    res.json(updatedClient);
+  } catch (error) {
+    console.error('❌ Erro ao atualizar cliente:', error);
+    res.status(500).json({ error: 'Erro ao atualizar cliente: ' + error.message });
+  }
+});
+
+// ✅ ROTA DELETE PARA EXCLUIR CLIENTE (NOVA)
+app.delete('/api/clients/:id', async (req, res) => {
+  try {
+    if (mongoose.connection.readyState !== 1) {
+      return res.status(500).json({ error: 'Banco de dados não disponível' });
+    }
+    
+    console.log('🗑️ Tentando excluir cliente:', req.params.id);
+    
+    const deletedClient = await Client.findByIdAndDelete(req.params.id);
+
+    if (!deletedClient) {
+      console.log('❌ Cliente não encontrado para exclusão:', req.params.id);
+      return res.status(404).json({ error: 'Cliente não encontrado' });
+    }
+
+    console.log('✅ Cliente excluído com sucesso:', req.params.id);
+    res.json({
+      success: true,
+      message: 'Cliente excluído com sucesso',
+      deletedClient: {
+        id: deletedClient._id,
+        name: deletedClient.name
+      }
+    });
+  } catch (error) {
+    console.error('❌ Erro ao excluir cliente:', error);
+    res.status(500).json({ error: 'Erro ao excluir cliente: ' + error.message });
+  }
+});
+
+// ==================== ROTAS DE PRODUTOS ====================
+
 app.get('/api/products', async (req, res) => {
   try {
     if (mongoose.connection.readyState !== 1) {
@@ -309,7 +437,93 @@ app.get('/api/products/:id', async (req, res) => {
   }
 });
 
-// ✅ ROTA PARA POPULAR BANCO
+// ✅ ROTA POST PARA PRODUTOS (JÁ EXISTIA)
+app.post('/api/products', async (req, res) => {
+  try {
+    if (mongoose.connection.readyState !== 1) {
+      return res.status(500).json({ error: 'Banco de dados não disponível' });
+    }
+    
+    const { name, description, price, stock } = req.body;
+    const userId = req.headers['user-id'];
+    
+    console.log('🔄 Criando produto para usuário:', userId);
+
+    const newProduct = new Product({
+      name,
+      description,
+      price,
+      stock,
+      createdBy: userId || null
+    });
+
+    const savedProduct = await newProduct.save();
+    res.json(savedProduct);
+  } catch (error) {
+    res.status(500).json({ error: 'Erro ao criar produto: ' + error.message });
+  }
+});
+
+// ✅ ROTA PUT PARA ATUALIZAR PRODUTO (NOVA)
+app.put('/api/products/:id', async (req, res) => {
+  try {
+    if (mongoose.connection.readyState !== 1) {
+      return res.status(500).json({ error: 'Banco de dados não disponível' });
+    }
+    
+    const { name, description, price, stock } = req.body;
+    console.log('🔄 Atualizando produto:', req.params.id);
+
+    const updatedProduct = await Product.findByIdAndUpdate(
+      req.params.id,
+      { name, description, price, stock },
+      { new: true, runValidators: true }
+    );
+
+    if (!updatedProduct) {
+      return res.status(404).json({ error: 'Produto não encontrado' });
+    }
+
+    console.log('✅ Produto atualizado:', updatedProduct._id);
+    res.json(updatedProduct);
+  } catch (error) {
+    console.error('❌ Erro ao atualizar produto:', error);
+    res.status(500).json({ error: 'Erro ao atualizar produto: ' + error.message });
+  }
+});
+
+// ✅ ROTA DELETE PARA EXCLUIR PRODUTO (NOVA)
+app.delete('/api/products/:id', async (req, res) => {
+  try {
+    if (mongoose.connection.readyState !== 1) {
+      return res.status(500).json({ error: 'Banco de dados não disponível' });
+    }
+    
+    console.log('🗑️ Tentando excluir produto:', req.params.id);
+    
+    const deletedProduct = await Product.findByIdAndDelete(req.params.id);
+
+    if (!deletedProduct) {
+      console.log('❌ Produto não encontrado para exclusão:', req.params.id);
+      return res.status(404).json({ error: 'Produto não encontrado' });
+    }
+
+    console.log('✅ Produto excluído com sucesso:', req.params.id);
+    res.json({
+      success: true,
+      message: 'Produto excluído com sucesso',
+      deletedProduct: {
+        id: deletedProduct._id,
+        name: deletedProduct.name
+      }
+    });
+  } catch (error) {
+    console.error('❌ Erro ao excluir produto:', error);
+    res.status(500).json({ error: 'Erro ao excluir produto: ' + error.message });
+  }
+});
+
+// ✅ ROTA PARA POPULAR BANCO (MANTIDA)
 app.post('/api/seed', async (req, res) => {
   try {
     if (mongoose.connection.readyState !== 1) {
@@ -398,7 +612,7 @@ app.post('/api/seed', async (req, res) => {
   }
 });
 
-// ✅ ROTA GET PARA SEED (para usar no navegador)
+// ✅ ROTA GET PARA SEED (MANTIDA)
 app.get('/api/seed-get', async (req, res) => {
   try {
     if (mongoose.connection.readyState !== 1) {
@@ -496,12 +710,12 @@ app.get('/api/seed-get', async (req, res) => {
   }
 });
 
-// ✅ INICIAR SERVIDOR (AGORA INICIA IMEDIATAMENTE)
+// ✅ INICIAR SERVIDOR
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`🎉 Servidor rodando na porta ${PORT}`);
-  console.log(`🌐 Health Check: http://localhost:${PORT}/health`);
-  console.log(`🔗 API: http://localhost:${PORT}/api`);
+  console.log(`🌐 Health Check: https://savir-sistemas.onrender.com/health`);
+  console.log(`🔗 API: https://savir-sistemas.onrender.com/api`);
   console.log(`📊 MongoDB: ${mongoose.connection.readyState === 1 ? '✅ Conectado' : '❌ Desconectado'}`);
 });
 
