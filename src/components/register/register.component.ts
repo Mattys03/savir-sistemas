@@ -156,6 +156,9 @@ export class RegisterComponent {
   loading = false;
   error = '';
 
+  // ✅ CORRIGIDO: URL do backend no Render
+  private apiUrl = 'https://savir-sistemas.onrender.com/api';
+
   registerForm = this.fb.group({
     name: ['', Validators.required],
     email: ['', [Validators.required, Validators.email]],
@@ -191,15 +194,32 @@ export class RegisterComponent {
           password: userData.password!
         };
 
-        this.http.post<any>('http://localhost:3000/api/users', newUser).subscribe({
+        // ✅ CORRIGIDO: Usando a URL do Render
+        this.http.post<any>(`${this.apiUrl}/users`, newUser).subscribe({
           next: (response) => {
             this.loading = false;
-            alert('🎉 Conta criada com sucesso! Agora faça login.');
-            this.router.navigate(['/login']);
+            
+            if (response.success) {
+              alert('🎉 Conta criada com sucesso! Agora faça login.');
+              this.router.navigate(['/login']);
+            } else {
+              this.error = response.error || 'Erro ao criar conta.';
+            }
           },
           error: (err) => {
             this.loading = false;
-            this.error = err.error?.error || 'Erro ao criar conta. Tente novamente.';
+            
+            // Mensagens de erro mais específicas
+            if (err.status === 400) {
+              this.error = err.error?.error || 'Dados inválidos. Verifique as informações.';
+            } else if (err.status === 409) {
+              this.error = 'Usuário ou email já existe. Tente outro.';
+            } else if (err.status === 0) {
+              this.error = 'Erro de conexão. Verifique se o backend está online.';
+            } else {
+              this.error = err.error?.error || 'Erro ao criar conta. Tente novamente.';
+            }
+            
             console.error('Erro no registro:', err);
           }
         });
