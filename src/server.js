@@ -49,7 +49,7 @@ const UserSchema = new mongoose.Schema({
   login: String,
   profile: String,
   password: String
-}, { timestamps: true });
+}, { timestamps: true, toJSON: { virtuals: true }, toObject: { virtuals: true } });
 
 const ClientSchema = new mongoose.Schema({
   name: String,
@@ -57,7 +57,7 @@ const ClientSchema = new mongoose.Schema({
   phone: String,
   address: String,
   createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }
-}, { timestamps: true });
+}, { timestamps: true, toJSON: { virtuals: true }, toObject: { virtuals: true } });
 
 const ProductSchema = new mongoose.Schema({
   name: String,
@@ -65,7 +65,7 @@ const ProductSchema = new mongoose.Schema({
   price: Number,
   stock: Number,
   createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }
-}, { timestamps: true });
+}, { timestamps: true, toJSON: { virtuals: true }, toObject: { virtuals: true } });
 
 const User = mongoose.model('User', UserSchema);
 const Client = mongoose.model('Client', ClientSchema);
