@@ -1,6 +1,11 @@
 import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 
@@ -710,12 +715,25 @@ app.get('/api/seed-get', async (req, res) => {
   }
 });
 
+// ✅ SERVIR FRONTEND ANGULAR (arquivos estáticos)
+const distPath = path.join(__dirname, '..', 'dist');
+app.use(express.static(distPath));
+
+// Redirecionar rotas não-API para o Angular (SPA)
+app.use((req, res, next) => {
+  if (!req.url.startsWith('/api') && !req.url.startsWith('/health')) {
+    res.sendFile(path.join(distPath, 'index.html'));
+  } else {
+    next();
+  }
+});
+
 // ✅ INICIAR SERVIDOR
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
   console.log(`🎉 Servidor rodando na porta ${PORT}`);
-  console.log(`🌐 Health Check: https://savir-sistemas.onrender.com/health`);
-  console.log(`🔗 API: https://savir-sistemas.onrender.com/api`);
+  console.log(`🌐 Health Check: http://localhost:${PORT}/health`);
+  console.log(`🔗 API: http://localhost:${PORT}/api`);
   console.log(`📊 MongoDB: ${mongoose.connection.readyState === 1 ? '✅ Conectado' : '❌ Desconectado'}`);
 });
 
