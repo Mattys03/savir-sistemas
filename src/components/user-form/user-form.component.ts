@@ -16,11 +16,13 @@ import { AuthService } from '../../services/auth.service';
   <h2 class="text-3xl font-bold mb-6 text-gray-800">{{ isEditMode() ? 'Editar Usuário' : 'Incluir Usuário' }}</h2>
 
   <!-- AVISO DE PERMISSÃO -->
-  <div *ngIf="showPermissionWarning()" class="mb-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
-    <p class="text-yellow-700 text-sm">
-      ⚠️ Você está editando seu próprio perfil. Algumas opções podem estar limitadas.
-    </p>
-  </div>
+  @if (showPermissionWarning()) {
+    <div class="mb-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+      <p class="text-yellow-700 text-sm">
+        ⚠️ Você está editando seu próprio perfil. Algumas opções podem estar limitadas.
+      </p>
+    </div>
+  }
 
   <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
     <div class="mb-4">
@@ -43,9 +45,11 @@ import { AuthService } from '../../services/auth.service';
         class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-900 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
         placeholder="Nome completo do usuário"
       />
-      <div *ngIf="userForm.get('name')?.invalid && userForm.get('name')?.touched" class="text-red-500 text-xs italic mt-1">
-        Nome é obrigatório.
-      </div>
+      @if (userForm.get('name')?.invalid && userForm.get('name')?.touched) {
+        <div class="text-red-500 text-xs italic mt-1">
+          Nome é obrigatório.
+        </div>
+      }
     </div>
 
     <div class="mb-4">
@@ -57,9 +61,11 @@ import { AuthService } from '../../services/auth.service';
         class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-900 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
         placeholder="email@example.com"
       />
-      <div *ngIf="userForm.get('email')?.invalid && userForm.get('email')?.touched" class="text-red-500 text-xs italic mt-1">
-        E-mail inválido ou obrigatório.
-      </div>
+      @if (userForm.get('email')?.invalid && userForm.get('email')?.touched) {
+        <div class="text-red-500 text-xs italic mt-1">
+          E-mail inválido ou obrigatório.
+        </div>
+      }
     </div>
 
     <div class="mb-4">
@@ -72,46 +78,57 @@ import { AuthService } from '../../services/auth.service';
         placeholder="Login do usuário"
         [readonly]="isEditMode()"
       />
-      <div *ngIf="userForm.get('login')?.invalid && userForm.get('login')?.touched" class="text-red-500 text-xs italic mt-1">
-        Login é obrigatório.
-      </div>
+      @if (userForm.get('login')?.invalid && userForm.get('login')?.touched) {
+        <div class="text-red-500 text-xs italic mt-1">
+          Login é obrigatório.
+        </div>
+      }
     </div>
 
-    <div *ngIf="!isEditMode()" class="mb-4">
-      <label for="password" class="block text-gray-700 text-sm font-semibold mb-2">Senha</label>
-      <input
-        id="password"
-        type="password"
-        formControlName="password"
-        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-900 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-        placeholder="Senha do usuário"
-        autocomplete="new-password"
-      />
-      <div *ngIf="userForm.get('password')?.invalid && userForm.get('password')?.touched" class="text-red-500 text-xs italic mt-1">
-        Senha é obrigatória.
+    @if (!isEditMode()) {
+      <div class="mb-4">
+        <label for="password" class="block text-gray-700 text-sm font-semibold mb-2">Senha</label>
+        <input
+          id="password"
+          type="password"
+          formControlName="password"
+          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-900 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          placeholder="Senha do usuário"
+          autocomplete="new-password"
+        />
+        @if (userForm.get('password')?.invalid && userForm.get('password')?.touched) {
+          <div class="text-red-500 text-xs italic mt-1">
+            Senha é obrigatória.
+          </div>
+        }
       </div>
-    </div>
+    }
 
     <div class="mb-6">
       <label for="profile" class="block text-gray-700 text-sm font-semibold mb-2">Perfil de Acesso</label>
       <select
         id="profile"
         formControlName="profile"
-        class="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
-        [disabled]="!canEditProfile()"
+        [class]="canEditProfile() 
+          ? 'block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900' 
+          : 'block appearance-none w-full bg-gray-100 border border-gray-300 px-4 py-2 pr-8 rounded shadow leading-tight text-gray-500 cursor-not-allowed'"
       >
         <option value="">Selecione...</option>
         <option value="Administrador">Administrador</option>
         <option value="Usuário">Usuário</option>
       </select>
-      <div *ngIf="userForm.get('profile')?.invalid && userForm.get('profile')?.touched" class="text-red-500 text-xs italic mt-1">
-        Perfil é obrigatório.
-      </div>
+      @if (userForm.get('profile')?.invalid && userForm.get('profile')?.touched) {
+        <div class="text-red-500 text-xs italic mt-1">
+          Perfil é obrigatório.
+        </div>
+      }
       
       <!-- AVISO SE NÃO PODE EDITAR PERFIL -->
-      <div *ngIf="!canEditProfile()" class="mt-2 text-sm text-gray-600">
-        💡 Apenas administradores podem alterar perfis de acesso.
-      </div>
+      @if (!canEditProfile()) {
+        <div class="mt-2 text-sm text-gray-600">
+          🔒 Apenas administradores podem alterar perfis de acesso.
+        </div>
+      }
     </div>
 
     <div class="flex justify-end space-x-4">
@@ -179,6 +196,11 @@ export class UserFormComponent implements OnInit {
         
         // Login não pode ser editado em modo de edição
         this.userForm.get('login')?.disable();
+
+        // BLOQUEAR PERFIL PARA USUÁRIOS NÃO-ADMIN
+        if (!this.canEditProfile()) {
+          this.userForm.get('profile')?.disable();
+        }
 
       } else {
         this.isEditMode.set(false);
