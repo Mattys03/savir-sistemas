@@ -10,43 +10,42 @@
   <header class="header" id="app-header"></header>
   <div class="container">
     <div class="card">
-      <h2 style="margin-bottom:20px">📊 Dashboard</h2>
+      <div class="card-header">
+        <h2>Dashboard</h2>
+      </div>
       <div class="stats-grid" id="stats">
         <div class="stat-card">
-          <div class="stat-icon users">👥</div>
-          <div class="stat-number" id="stat-users">-</div>
           <div class="stat-label">Usuários Ativos</div>
+          <div class="stat-number" id="stat-users">-</div>
         </div>
         <div class="stat-card">
-          <div class="stat-icon clients">🏢</div>
-          <div class="stat-number" id="stat-clients">-</div>
           <div class="stat-label">Clientes na Base</div>
+          <div class="stat-number" id="stat-clients">-</div>
         </div>
         <div class="stat-card">
-          <div class="stat-icon products">📦</div>
-          <div class="stat-number" id="stat-products">-</div>
           <div class="stat-label">Produtos Cadastrados</div>
+          <div class="stat-number" id="stat-products">-</div>
         </div>
       </div>
     </div>
     <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem;">
       <div class="card">
-        <h3>🏗️ Arquitetura do Sistema</h3>
-        <p style="margin-top:12px; color:#555; line-height:1.6">
+        <h3>Arquitetura do Sistema</h3>
+        <p>
           Este sistema usa <strong>arquitetura de microserviços</strong> com dois serviços independentes
           que se comunicam via <strong>API REST (HTTP)</strong>. Hospedado na <strong>AWS Elastic Beanstalk</strong>.
         </p>
-        <ul style="margin:12px 0 0 20px; color:#555; line-height:1.8">
+        <ul style="margin-top: 1rem; padding-left: 1.5rem; list-style-type: disc;">
           <li><strong>Auth Service</strong> (porta 8081) — Autenticação e gestão de usuários</li>
           <li><strong>Catalog Service</strong> (porta 8082) — Gestão de clientes e produtos</li>
           <li><strong>Nginx Gateway</strong> (porta 80) — Roteamento reverso de APIs e Arquivos Estáticos</li>
         </ul>
-        <p style="margin-top:12px; color:#555; line-height:1.6">
+        <p style="margin-top: 1rem;">
           Padrões aplicados: <strong>MVC</strong>, <strong>GRASP</strong> (Controller, Creator, Expert, Alta Coesão, Baixo Acoplamento).
         </p>
       </div>
       <div class="card">
-        <h3>⚡ Atividades Recentes</h3>
+        <h3>Atividades Recentes</h3>
         <div class="activity-feed">
           <div class="activity-item">
             <div class="activity-dot blue"></div>
@@ -59,7 +58,7 @@
             <div class="activity-time">Hoje</div>
           </div>
           <div class="activity-item">
-            <div class="activity-dot red"></div>
+            <div class="activity-dot blue"></div>
             <div class="activity-content">Sincronização AWS DB</div>
             <div class="activity-time">Online</div>
           </div>

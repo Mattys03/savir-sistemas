@@ -68,20 +68,28 @@ function renderHeader() {
   const h = document.getElementById('app-header');
   if (!h || !isLoggedIn()) return;
   h.innerHTML = `
-    <h1>Savir Sistemas</h1>
-    <nav>
-      <a href="dashboard.html">Início</a>
+    <div class="header-logo">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+      Savir Sistemas
+    </div>
+    <nav class="nav-menu">
+      <a href="dashboard.html" class="nav-link">Início</a>
       <div class="dropdown">
-        <a href="#" onclick="toggleDropdown(event)">Cadastros ▾</a>
-        <div class="dropdown-menu" id="dropdown-menu">
+        <a href="#" class="nav-link dropdown-toggle" onclick="toggleDropdown(event)">Cadastros ▾</a>
+        <div class="dropdown-content" id="dropdown-menu">
           <a href="users.html">Usuários</a>
           <a href="clients.html">Clientes</a>
           <a href="products.html">Produtos</a>
         </div>
       </div>
-      <span class="user-info">Olá, ${currentUser.name}!</span>
-      <button class="btn-logout" onclick="logout()">Sair</button>
-    </nav>`;
+    </nav>
+    <div class="header-actions">
+      <span class="user-badge">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+        ${currentUser.name}
+      </span>
+      <button class="btn btn-outline" onclick="logout()">Sair</button>
+    </div>`;
 }
 
 function toggleDropdown(e) {
