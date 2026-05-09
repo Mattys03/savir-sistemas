@@ -9,7 +9,7 @@ import { Observable, tap } from 'rxjs';
 export class AuthService {
   private http = inject(HttpClient);
   private router = inject(Router);
-  private apiUrl = 'https://savir-sistemas.onrender.com/api'; // ✅ URL DE PRODUÇÃO
+  private apiUrl = '/api'; // ✅ URL DE PRODUÇÃO
 
   currentUser = signal<any>(null);
 

@@ -8,7 +8,7 @@ import { User } from '../models/user.model';
 })
 export class UserService {
   private http = inject(HttpClient);
-  private apiUrl = 'https://savir-sistemas.onrender.com/api'; // ✅ URL DE PRODUÇÃO
+  private apiUrl = '/api'; // ✅ URL DE PRODUÇÃO
 
   getAllUsers(): Observable<User[]> {
     return this.http.get<User[]>(`${this.apiUrl}/users`);

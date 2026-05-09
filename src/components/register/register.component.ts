@@ -157,7 +157,7 @@ export class RegisterComponent {
   error = '';
 
   // ✅ CORRIGIDO: URL do backend no Render
-  private apiUrl = 'https://savir-sistemas.onrender.com/api';
+  private apiUrl = '/api';
 
   registerForm = this.fb.group({
     name: ['', Validators.required],

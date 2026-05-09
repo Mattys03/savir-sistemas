@@ -10,7 +10,7 @@ import { AuthService } from './auth.service';
 export class ProductService {
   private http = inject(HttpClient);
   private authService = inject(AuthService);
-  private apiUrl = 'https://savir-sistemas.onrender.com/api'; // ✅ URL DE PRODUÇÃO
+  private apiUrl = '/api'; // ✅ URL DE PRODUÇÃO
 
   getAllProducts(): Observable<Product[]> {
     return this.http.get<Product[]>(`${this.apiUrl}/products`);
