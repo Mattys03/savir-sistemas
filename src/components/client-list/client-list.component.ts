@@ -51,29 +51,25 @@ import { Client } from '../../models/client.model';
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ client.address }}</td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                   
-                  <!-- 🔥 EDITAR: Só aparece se for admin OU se for o criador -->
-                  <button
-                    *ngIf="authService.isAdministrator() || isOwner(client.createdBy)"
-                    (click)="editClient(client.id!)"
-                    class="text-indigo-600 hover:text-indigo-900 mr-3"
-                  >
-                    Editar
-                  </button>
-                  
-                  <!-- 🔥 EXCLUIR: Só aparece se for admin OU se for o criador -->
-                  <button
-                    *ngIf="authService.isAdministrator() || isOwner(client.createdBy)"
-                    (click)="deleteClient(client.id!)"
-                    class="text-red-600 hover:text-red-900"
-                  >
-                    Excluir
-                  </button>
-
-                  <!-- 🔥 MENSAGEM se não tem permissão -->
-                  <span *ngIf="!authService.isAdministrator() && !isOwner(client.createdBy)" 
-                        class="text-gray-400 text-xs">
-                    Sem permissão
-                  </span>
+                  @if (authService.isAdministrator() || isOwner(client.createdBy)) {
+                    <button
+                      (click)="editClient(client.id!)"
+                      class="text-indigo-600 hover:text-indigo-900 mr-3"
+                    >
+                      Editar
+                    </button>
+                    
+                    <button
+                      (click)="deleteClient(client.id!)"
+                      class="text-red-600 hover:text-red-900"
+                    >
+                      Excluir
+                    </button>
+                  } @else {
+                    <span class="text-gray-400 text-xs">
+                      Sem permissão
+                    </span>
+                  }
                 </td>
               </tr>
             }
@@ -83,12 +79,15 @@ import { Client } from '../../models/client.model';
 
       <!-- ✅ Aviso de permissões -->
       <div class="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-        <p class="text-blue-700 text-sm" *ngIf="authService.isAdministrator()">
-          👑 Você é administrador e pode gerenciar todos os clientes.
-        </p>
-        <p class="text-blue-700 text-sm" *ngIf="!authService.isAdministrator()">
-          🔒 Você só pode editar/excluir os clientes que você criou.
-        </p>
+        @if (authService.isAdministrator()) {
+          <p class="text-blue-700 text-sm">
+            👑 Você é administrador e pode gerenciar todos os clientes.
+          </p>
+        } @else {
+          <p class="text-blue-700 text-sm">
+            🔒 Você só pode editar/excluir os clientes que você criou.
+          </p>
+        }
       </div>
     </div>
   `,

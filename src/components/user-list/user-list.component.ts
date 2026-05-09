@@ -15,13 +15,14 @@ import { User } from '../../models/user.model';
         <h2 class="text-3xl font-bold text-gray-800">Lista de Usuários</h2>
         
         <!-- ✅ Só admin pode adicionar usuários -->
-        <button
-          *ngIf="authService.isAdministrator()"
-          (click)="router.navigate(['/users/add'])"
-          class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
-        >
-          Novo Usuário
-        </button>
+        @if (authService.isAdministrator()) {
+          <button
+            (click)="router.navigate(['/users/add'])"
+            class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+          >
+            Novo Usuário
+          </button>
+        }
       </div>
 
       <!-- Loading state -->
@@ -56,35 +57,37 @@ import { User } from '../../models/user.model';
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                   
-                  <!-- 🔥 BOTÃO EDITAR: Só aparece se for admin OU se for o próprio perfil -->
-                  <button
-                    *ngIf="authService.isAdministrator() || isOwnProfile(user.id!)"
-                    (click)="editUser(user.id!)"
-                    class="text-indigo-600 hover:text-indigo-900 mr-3"
-                  >
-                    Editar
-                  </button>
-                  
-                  <!-- 🔥 BOTÃO EXCLUIR: Só aparece se for admin E NÃO for o próprio perfil -->
-                  <button
-                    *ngIf="authService.isAdministrator() && !isOwnProfile(user.id!)"
-                    (click)="deleteUser(user.id!)"
-                    class="text-red-600 hover:text-red-900"
-                  >
-                    Excluir
-                  </button>
-
-                  <!-- 🔥 MENSAGEM para usuário comum no próprio perfil -->
-                  <span *ngIf="!authService.isAdministrator() && isOwnProfile(user.id!)" 
-                        class="text-gray-500 text-xs">
-                    Seu perfil
-                  </span>
-
-                  <!-- 🔥 MENSAGEM para usuário comum em outros perfis -->
-                  <span *ngIf="!authService.isAdministrator() && !isOwnProfile(user.id!)" 
-                        class="text-gray-400 text-xs">
-                    Sem permissão
-                  </span>
+                  @if (authService.isAdministrator()) {
+                    <button
+                      (click)="editUser(user.id!)"
+                      class="text-indigo-600 hover:text-indigo-900 mr-3"
+                    >
+                      Editar
+                    </button>
+                    
+                    @if (!isOwnProfile(user.id!)) {
+                      <button
+                        (click)="deleteUser(user.id!)"
+                        class="text-red-600 hover:text-red-900"
+                      >
+                        Excluir
+                      </button>
+                    }
+                  } @else if (isOwnProfile(user.id!)) {
+                    <button
+                      (click)="editUser(user.id!)"
+                      class="text-indigo-600 hover:text-indigo-900 mr-3"
+                    >
+                      Editar
+                    </button>
+                    <span class="text-gray-500 text-xs">
+                      Seu perfil
+                    </span>
+                  } @else {
+                    <span class="text-gray-400 text-xs">
+                      Sem permissão
+                    </span>
+                  }
                 </td>
               </tr>
             }
@@ -92,19 +95,20 @@ import { User } from '../../models/user.model';
         </table>
       </div>
 
-      <!-- ✅ Aviso para usuários não administradores -->
-      <div *ngIf="!authService.isAdministrator()" class="mt-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
-        <p class="text-yellow-700 text-sm">
-          🔒 Você só pode editar seu próprio perfil. Apenas administradores podem gerenciar outros usuários.
-        </p>
-      </div>
-
       <!-- ✅ Aviso para administradores -->
-      <div *ngIf="authService.isAdministrator()" class="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-        <p class="text-blue-700 text-sm">
-          👑 Você tem permissão total para gerenciar todos os usuários.
-        </p>
-      </div>
+      @if (authService.isAdministrator()) {
+        <div class="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+          <p class="text-blue-700 text-sm">
+            👑 Você tem permissão total para gerenciar todos os usuários.
+          </p>
+        </div>
+      } @else {
+        <div class="mt-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+          <p class="text-yellow-700 text-sm">
+            🔒 Você só pode editar seu próprio perfil. Apenas administradores podem gerenciar outros usuários.
+          </p>
+        </div>
+      }
     </div>
   `,
 })
