@@ -58,7 +58,7 @@
         const list = await getUsers();
         const tc = document.getElementById('table-container');
         if (list.length === 0) { tc.innerHTML = '<p class="loading">Nenhum usuário.</p>'; return; }
-        const badges = { 'Administrador': 'background:#fee2e2;color:#991b1b', 'Usuário': 'background:#dcfce7;color:#166534' };
+        const badges = { 'Administrador': 'background:#ffedd5;color:#ea580c;border:1px solid #fed7aa', 'Usuário': 'background:#f1f5f9;color:#475569;border:1px solid #e2e8f0' };
         tc.innerHTML = '<table><thead><tr><th>ID</th><th>Nome</th><th>Email</th><th>Login</th><th>Perfil</th><th>Ações</th></tr></thead><tbody>' +
           list.map(u => {
             const isSelf = u.id === currentUser.id;
