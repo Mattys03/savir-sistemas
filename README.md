@@ -2,6 +2,15 @@
 
 Plataforma Full-Stack de gestão corporativa construída com o stack MEAN (MongoDB, Express, Angular, Node.js). O projeto foca em prover uma interface ágil e responsiva para administração de recursos empresariais, com uma arquitetura backend leve e adaptada para ambientes Serverless.
 
+## 📸 Screenshots da Aplicação
+
+<div align="center">
+  <img src="screenshots/dashboard.png" width="48%" alt="Dashboard" />
+  <img src="screenshots/users.png" width="48%" alt="Usuários" />
+  <img src="screenshots/products.png" width="48%" alt="Produtos" />
+  <img src="screenshots/clients.png" width="48%" alt="Clientes" />
+</div>
+
 ## 🛠️ Tecnologias Utilizadas
 
 ### Front-end
