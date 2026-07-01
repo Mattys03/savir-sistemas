@@ -1,0 +1,7 @@
+com\savir\auth\controller\AuthController.class
+com\savir\auth\repository\UserRepository.class
+com\savir\auth\AuthServiceApplication.class
+com\savir\auth\config\DataSeeder.class
+com\savir\auth\model\User.class
+com\savir\auth\controller\UserController.class
+com\savir\auth\service\UserService.class

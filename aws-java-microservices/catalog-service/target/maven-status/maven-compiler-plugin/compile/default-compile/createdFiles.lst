@@ -1,0 +1,12 @@
+com\savir\catalog\service\AuthClient.class
+com\savir\catalog\controller\ClientController.class
+com\savir\catalog\repository\ClientRepository.class
+com\savir\catalog\controller\ProductController.class
+com\savir\catalog\repository\ProductRepository.class
+com\savir\catalog\CatalogServiceApplication.class
+com\savir\catalog\service\ProductService.class
+com\savir\catalog\config\DataSeeder.class
+com\savir\catalog\service\ClientService.class
+com\savir\catalog\config\RestTemplateConfig.class
+com\savir\catalog\model\Client.class
+com\savir\catalog\model\Product.class
