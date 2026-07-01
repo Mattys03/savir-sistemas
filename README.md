@@ -5,23 +5,23 @@ Plataforma Full-Stack de gestão corporativa construída com o stack MEAN (Mongo
 ## 📸 Screenshots e Funcionalidades
 
 ### 0. Tela de Autenticação (Login)
-<img src="screenshots/login.png" width="800" alt="Login" />
+<img src="screenshots/login_v2.png" width="800" alt="Login" />
 *Ponto de acesso protegido do sistema. A tela de login valida as credenciais via API e armazena o token JWT de forma segura. Para fins de demonstração, o acesso padrão é `admin` com a senha `123456`.*
 
 ### 1. Dashboard Principal
-<img src="screenshots/dashboard.png" width="800" alt="Dashboard" />
+<img src="screenshots/dashboard_v2.png" width="800" alt="Dashboard" />
 *A tela de Dashboard é o ponto de entrada seguro do sistema. Ela foi desenvolvida utilizando os novos **Signals** do Angular para obter os dados de sessão em tempo real sem a necessidade de `RxJS Subscriptions` complexas. Seu propósito é guiar o usuário pelas funcionalidades principais (Usuários, Clientes, Produtos).*
 
 ### 2. Gestão de Usuários
-<img src="screenshots/users.png" width="800" alt="Usuários" />
+<img src="screenshots/users_v2.png" width="800" alt="Usuários" />
 *Interface de administração do sistema. Utiliza **Tailwind CSS** para criar uma tabela responsiva e limpa. A comunicação com o Backend é feita via `HttpClient` e o gerenciamento de estado das listas é otimizado com a estratégia de detecção de mudanças `OnPush` para maior performance.*
 
 ### 3. Catálogo de Produtos
-<img src="screenshots/products.png" width="800" alt="Produtos" />
+<img src="screenshots/products_v2.png" width="800" alt="Produtos" />
 *Módulo de listagem e controle de estoque/produtos. Demonstra a padronização de UI/UX através da reutilização de componentes (Tabelas e Botões). Integrado diretamente com as Serverless Functions da Vercel (`/api/products`), garantindo baixa latência no carregamento dos dados.*
 
 ### 4. Cadastro de Clientes
-<img src="screenshots/clients.png" width="800" alt="Clientes" />
+<img src="screenshots/clients_v2.png" width="800" alt="Clientes" />
 *Módulo de gestão da base de clientes da empresa. Construído focado em agilidade, permitindo edição e exclusão rápidas. O design minimalista e focado foi projetado para ambientes de alta produtividade (Backoffice).*
 
 ## 🛠️ Tecnologias Utilizadas
