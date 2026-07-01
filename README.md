@@ -2,14 +2,23 @@
 
 Plataforma Full-Stack de gestão corporativa construída com o stack MEAN (MongoDB, Express, Angular, Node.js). O projeto foca em prover uma interface ágil e responsiva para administração de recursos empresariais, com uma arquitetura backend leve e adaptada para ambientes Serverless.
 
-## 📸 Screenshots da Aplicação
+## 📸 Screenshots e Funcionalidades
 
-<div align="center">
-  <img src="screenshots/dashboard.png" width="48%" alt="Dashboard" />
-  <img src="screenshots/users.png" width="48%" alt="Usuários" />
-  <img src="screenshots/products.png" width="48%" alt="Produtos" />
-  <img src="screenshots/clients.png" width="48%" alt="Clientes" />
-</div>
+### 1. Dashboard Principal
+<img src="screenshots/dashboard.png" width="800" alt="Dashboard" />
+*A tela de Dashboard é o ponto de entrada seguro do sistema. Ela foi desenvolvida utilizando os novos **Signals** do Angular para obter os dados de sessão em tempo real sem a necessidade de `RxJS Subscriptions` complexas. Seu propósito é guiar o usuário pelas funcionalidades principais (Usuários, Clientes, Produtos).*
+
+### 2. Gestão de Usuários
+<img src="screenshots/users.png" width="800" alt="Usuários" />
+*Interface de administração do sistema. Utiliza **Tailwind CSS** para criar uma tabela responsiva e limpa. A comunicação com o Backend é feita via `HttpClient` e o gerenciamento de estado das listas é otimizado com a estratégia de detecção de mudanças `OnPush` para maior performance.*
+
+### 3. Catálogo de Produtos
+<img src="screenshots/products.png" width="800" alt="Produtos" />
+*Módulo de listagem e controle de estoque/produtos. Demonstra a padronização de UI/UX através da reutilização de componentes (Tabelas e Botões). Integrado diretamente com as Serverless Functions da Vercel (`/api/products`), garantindo baixa latência no carregamento dos dados.*
+
+### 4. Cadastro de Clientes
+<img src="screenshots/clients.png" width="800" alt="Clientes" />
+*Módulo de gestão da base de clientes da empresa. Construído focado em agilidade, permitindo edição e exclusão rápidas. O design minimalista e focado foi projetado para ambientes de alta produtividade (Backoffice).*
 
 ## 🛠️ Tecnologias Utilizadas
 
